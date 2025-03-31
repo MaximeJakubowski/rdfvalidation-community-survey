@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>DuckDB Web Shell via CDN</title>
+    <title>RDF Validation Survey DuckDB Shell</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
     <style>
       html, body {
@@ -19,7 +19,7 @@
     </style>
   </head>
   <body>
-    <div id="shell-container"></div>
+    <div id="shell-container">Loading...</div>
 
     <script>
       const getDb = async () => {
@@ -48,7 +48,7 @@
         // List your Parquet files her
         const files = [
             "answers.parquet",
-            "questions_lt.parquet",
+            "question_lt.parquet",
             ...Array.from({ length: 30 }, (_, i) =>
                 `q${String(i + 1).padStart(2, "0")}_lt.parquet`
             )
@@ -59,7 +59,7 @@
             const url = `parquet_files/${file}`;
             const response = await fetch(url);
             if (!response.ok) {
-              console.warn(`⚠️ Could not load ${file}`);
+              console.warn(`Could not load ${file}`);
               continue;
             }
 
@@ -68,9 +68,9 @@
 
             const tableName = file.replace(".parquet", "");
             await conn.query(`CREATE VIEW ${tableName} AS SELECT * FROM read_parquet('${file}');`);
-            console.log(`✅ Registered ${file} as '${tableName}'`);
+            console.log(`Registered ${file} as '${tableName}'`);
           } catch (err) {
-            console.error(`❌ Error loading ${file}:`, err);
+            console.error(`Error loading ${file}:`, err);
           }
         }
         window._db = db;
