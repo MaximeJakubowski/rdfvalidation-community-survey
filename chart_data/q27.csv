@@ -1,0 +1,6 @@
+"label","t1_value","t2_value"
+"More than 100M triples",4,7
+"1M to 100M triples",9,16
+"100K to 1M triples",5,14
+"1 to 100K triples",11,33
+"No answer",1,24
