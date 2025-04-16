@@ -1,96 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>RDF Validation Survey DuckDB Shell</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
-    <style>
-      html, body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        background: #1e1e1e;
-        color: white;
-      }
-      #shell-container {
-        width: 100vw;
-        height: 100vh;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="shell-container">Loading...</div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validating RDF Data: a Community Survey Results</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
 
-    <script>
-      const getDb = async () => {
-        const duckdb = window.duckdbduckdbWasm;
-        if (window._db) return window._db;
+<h1>Validating RDF Data: a Community Survey</h1>
+<p>This webpage gives an overview of the results from the RDF Validation Survey,
+specifically for the answers collected between December 2024 and March 2025.</p>
 
-        const JSDELIVR_BUNDLES = duckdb.getJsDelivrBundles();
-        const bundle = await duckdb.selectBundle(JSDELIVR_BUNDLES);
+<p>All graphs have been generated based on the cleaned data available as 
+    <a href="">CSV files</a>, or a ready-made <a href="">DuckDB file</a>. 
+    You can find the SQL queries retrieving the data for the graphs below 
+    every graph. Try them out in our <a href="databaseshell.html">database shell</a> 
+    directly in the browser!
+</p>
 
-        const worker_url = URL.createObjectURL(
-          new Blob([`importScripts("${bundle.mainWorker}");`], {
-            type: "text/javascript",
-          })
-        );
+<h2>Highlighted Insights</h2>
+<p>TODO: here we will highlight the same graphs as in the paper</p>
 
-        const logger = new duckdb.ConsoleLogger();
-        const db = new duckdb.AsyncDuckDB(logger, new Worker(worker_url));
-        await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
-        URL.revokeObjectURL(worker_url);
+<h2>Overview per Question</h2>
 
+<h3>Question 1: What is your professional background?</h3>
+<div class="chart-container">
+    <canvas id="chartQ01"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code id="q01sql">CONTENT NOT LOADED.</code></pre>
+</details>
 
-        await db.open({ path: ":memory:" });
+<h3>Question 2: How many years of experience do you have with RDF validation/shape technologies?</h3>
+<div class="chart-container">
+    <canvas id="chartQ02"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
 
-        const conn = await db.connect();
+<h3>Question 3: Do you work with different graph models or RDF standards? Please select all that apply.</h3>
+<div class="chart-container">
+    <canvas id="chartQ03"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
 
-        // List your Parquet files her
-        const files = [
-            "answers.parquet",
-            "question_lt.parquet",
-            ...Array.from({ length: 30 }, (_, i) =>
-                `q${String(i + 1).padStart(2, "0")}_lt.parquet`
-            )
-            ];
+<h3>Question 4: What RDF validation technologies do you have experience with? Please select all that apply.</h3>
+<div class="chart-container">
+    <canvas id="chartQ04"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
 
-        for (const file of files) {
-          try {
-            const url = `parquet_files/${file}`;
-            const response = await fetch(url);
-            if (!response.ok) {
-              console.warn(`Could not load ${file}`);
-              continue;
-            }
+<h3>Question 5: How frequently do you work with RDF shape languages?</h3>
+<div class="chart-container">
+    <canvas id="chartQ05"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
 
-            const buffer = new Uint8Array(await response.arrayBuffer());
-            await db.registerFileBuffer(file, buffer);
+<h3>Question 6: What are the main data domains you use SHACL or ShEx for? Please select all that apply.</h3>
+<div class="chart-container">
+    <canvas id="chartQ06"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
 
-            const tableName = file.replace(".parquet", "");
-            await conn.query(`CREATE VIEW ${tableName} AS SELECT * FROM read_parquet('${file}');`);
-            console.log(`Registered ${file} as '${tableName}'`);
-          } catch (err) {
-            console.error(`Error loading ${file}:`, err);
-          }
-        }
-        window._db = db;
-        return db;
-      };
-    </script>
+<h3>Question 7: In your projects, how do SHACL and ShEx affect data quality and consistency?</h3>
+<div class="chart-container">
+    <canvas id="chartQ07"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
 
-    <script type="module">
-      import * as duckdbduckdbWasm from "https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.28.1-dev106.0/+esm";
-      import { embed } from "https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm-shell@1.28.1-dev106.0/+esm";
+<h3>Question 8: If you had to choose one language for future projects, which would it be?</h3>
+<div class="chart-container">
+    <canvas id="chartQ08"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
 
-      window.duckdbduckdbWasm = duckdbduckdbWasm;
+<h3>Question 9: When validating, how many distinct classes and properties does your data graph usually have?</h3>
+<div class="chart-container">
+    <canvas id="chartQ09"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
 
-      const db = await getDb();
+<h3>Question 10: When validating, how large is your RDF graph usually?</h3>
+<div class="chart-container">
+    <canvas id="chartQ10"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
 
-      embed({
-        container: document.getElementById("shell-container"),
-        shellModule: "https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm-shell@1.28.1-dev106.0/dist/shell_bg.wasm",
-        resolveDatabase: async () => db
-      });
-    </script>
-  </body>
+<h3>Question 11: If you are a user of SHACL, which validation software/framework do you use?</h3>
+<div class="chart-container">
+    <canvas id="chartQ11"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
+
+<h3>Question 12: If you are a user of ShEx, which validation software/framework do you use?</h3>
+<div class="chart-container">
+    <canvas id="chartQ12"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
+
+<h3>Question 13: What do you consider the main advantages of SHACL/ShEx in your work or projects? Please select all that apply.</h3>
+<div class="chart-container">
+    <canvas id="chartQ13"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
+
+<h3>Question 14: Have you encountered any limitations or challenges when using SHACL/ShEx?</h3>
+<div class="chart-container">
+    <canvas id="chartQ14"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
+
+<h3>Question 15: Have you worked with evolving or dynamic RDF knowledge graphs? If yes, how do you adapt your validation processes?</h3>
+<div class="chart-container">
+    <canvas id="chartQ15"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
+
+<h3>Question 16: How often do you use SHACL-core constraint components (for example sh:mincount etc)?</h3>
+<div class="chart-container">
+    <canvas id="chartQ16"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
+
+<h3>Question 17: Do you use SPARQL-based constraint components?</h3>
+<div class="chart-container">
+    <canvas id="chartQ17"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
+
+<h3>Question 18: If you use SPARQL-based constraint components, please specify the reason:</h3>
+<div class="chart-container">
+    <canvas id="chartQ18"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
+
+<h3>Question 19: Is the information provided by the validation report sufficient for your use cases?</h3>
+<div class="chart-container">
+    <canvas id="chartQ19"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
+
+<h3>Question 20: Which of the SHACL advanced features do you use?</h3>
+<div class="chart-container">
+    <canvas id="chartQ20"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
+
+<h3>Question 21: Which extensions of the SHACL standard do you wish for?</h3>
+<div class="chart-container">
+    <canvas id="chartQ21"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
+
+<h3>Question 22: How do you generate validating shapes SHACL/ShEx?</h3>
+<div class="chart-container">
+    <canvas id="chartQ22"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
+
+<h3>Question 23: Which tools or method do you use to extract/create validating shapes (SHACL/ShEx)?</h3>
+<div class="chart-container">
+    <canvas id="chartQ23"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
+
+<h3>Question 24: How many shapes do you usually generate?</h3>
+<div class="chart-container">
+    <canvas id="chartQ24"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
+
+<h3>Question 25: How large is your ontology usually in the context of shape extraction?</h3>
+<div class="chart-container">
+    <canvas id="chartQ25"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
+
+<h3>Question 26: How many distinct predicate types are present in your RDF graph usually?</h3>
+<div class="chart-container">
+    <canvas id="chartQ26"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
+
+<h3>Question 27: How large is your RDF graph usually in the context of shape extraction?</h3>
+<div class="chart-container">
+    <canvas id="chartQ27"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
+
+<h3>Question 28: Do you generate shapes for the entire graph or only for some portions?</h3>
+<div class="chart-container">
+    <canvas id="chartQ28"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
+
+<h3>Question 29: What are the shortcomings you experienced when working with SHACL/ShEx? Please select all that apply.</h3>
+<div class="chart-container">
+    <canvas id="chartQ29"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
+
+<h3>Question 30: What features would improve the usefulness of validation reports? Please select all that apply.</h3>
+<div class="chart-container">
+    <canvas id="chartQ30"></canvas>
+</div>
+<details>
+    <summary>Show/Hide Source SQL Query</summary>
+    <pre><code>SHOW TABLES;</code></pre>
+</details>
+
+<script src="surveyoverview_charts.js" defer></script>
+
+</body>
 </html>
