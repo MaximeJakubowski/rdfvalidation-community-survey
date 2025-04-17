@@ -48,6 +48,7 @@
         // List your Parquet files her
         const files = [
             "answers.parquet",
+            "answers_historical.parquet",
             "question_lt.parquet",
             ...Array.from({ length: 30 }, (_, i) =>
                 `q${String(i + 1).padStart(2, "0")}_lt.parquet`

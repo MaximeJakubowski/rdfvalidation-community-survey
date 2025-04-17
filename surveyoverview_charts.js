@@ -236,75 +236,75 @@ document.addEventListener('DOMContentLoaded', () => {
     loadFileContent('q12.sql', 'q12sql');
 
     // Expected CSV: label,value
-    createChartFromCSV('chartQ13', 'bar', 'q13_data.csv', {}, true); // Horizontal bar
+    createChartFromCSV('chartQ13', 'bar', 'q13.csv', {}, true); // Horizontal bar // MODIFIED
     loadFileContent('q13.sql', 'q13sql');
 
     // Expected CSV: label,value
-    createChartFromCSV('chartQ14', 'bar', 'q14_data.csv', {}, true); // Horizontal bar
+    createChartFromCSV('chartQ14', 'bar', 'q14.csv', {}, true); // Horizontal bar // MODIFIED
     loadFileContent('q14.sql', 'q14sql');
 
     // Expected CSV: label,value
-    createChartFromCSV('chartQ15', 'pie', 'q15_data.csv');
+    createChartFromCSV('chartQ15', 'pie', 'q15.csv'); // MODIFIED
     loadFileContent('q15.sql', 'q15sql');
 
      // Expected CSV: label,value
-    createChartFromCSV('chartQ16', 'pie', 'q16_data.csv');
+    createChartFromCSV('chartQ16', 'pie', 'q16.csv'); // MODIFIED
     loadFileContent('q16.sql', 'q16sql');
 
      // Expected CSV: label,value
-    createChartFromCSV('chartQ17', 'pie', 'q17_data.csv');
+    createChartFromCSV('chartQ17', 'pie', 'q17.csv'); // MODIFIED
     loadFileContent('q17.sql', 'q17sql');
 
     // Expected CSV: label,value
-    createChartFromCSV('chartQ18', 'bar', 'q18_data.csv', {}, true); // Horizontal bar
+    createChartFromCSV('chartQ18', 'bar', 'q18.csv', {}, true); // Horizontal bar // MODIFIED
     loadFileContent('q18.sql', 'q18sql');
 
     // Expected CSV: label,value
-    createChartFromCSV('chartQ19', 'pie', 'q19_data.csv');
+    createChartFromCSV('chartQ19', 'pie', 'q19.csv'); // MODIFIED
     loadFileContent('q19.sql', 'q19sql');
 
     // Expected CSV: label,value
-    createChartFromCSV('chartQ20', 'bar', 'q20_data.csv', {}, true); // Horizontal bar]
+    createChartFromCSV('chartQ20', 'bar', 'q20.csv', {}, true); // Horizontal bar // MODIFIED
     loadFileContent('q20.sql', 'q20sql');
 
     // Expected CSV: label,value
-    createChartFromCSV('chartQ21', 'bar', 'q21_data.csv', {}, true); // Horizontal bar
+    createChartFromCSV('chartQ21', 'bar', 'q21.csv', {}, true); // Horizontal bar // MODIFIED
     loadFileContent('q21.sql', 'q21sql');
 
      // Expected CSV: label,t1_value,t2_value
-    createChartFromCSV('chartQ22', 'groupedBar', 'q22_trend_data.csv', {}, true); // Horizontal bar
+    createChartFromCSV('chartQ22', 'groupedBar', 'q22.csv', {}, true); // Horizontal bar // MODIFIED
     loadFileContent('q22.sql', 'q22sql');
 
     // Expected CSV: label,t1_value,t2_value
-    createChartFromCSV('chartQ23', 'groupedBar', 'q23_trend_data.csv', {}, true); // Horizontal bar
+    createChartFromCSV('chartQ23', 'groupedBar', 'q23.csv', {}, true); // Horizontal bar // MODIFIED
     loadFileContent('q23.sql', 'q23sql');
 
     // Expected CSV: label,t1_value,t2_value
-    createChartFromCSV('chartQ24', 'groupedBar', 'q24_trend_data.csv');
+    createChartFromCSV('chartQ24', 'groupedBar', 'q24.csv'); // MODIFIED
     loadFileContent('q24.sql', 'q24sql');
 
     // Expected CSV: label,t1_value,t2_value
-    createChartFromCSV('chartQ25', 'groupedBar', 'q25_trend_data.csv');
+    createChartFromCSV('chartQ25', 'groupedBar', 'q25.csv'); // MODIFIED
     loadFileContent('q25.sql', 'q25sql');
 
     // Expected CSV: label,t1_value,t2_value
-    createChartFromCSV('chartQ26', 'groupedBar', 'q26_trend_data.csv');
+    createChartFromCSV('chartQ26', 'groupedBar', 'q26.csv'); // MODIFIED
     loadFileContent('q26.sql', 'q26sql');
 
     // Expected CSV: label,t1_value,t2_value
-    createChartFromCSV('chartQ27', 'groupedBar', 'q27_trend_data.csv');
+    createChartFromCSV('chartQ27', 'groupedBar', 'q27.csv'); // MODIFIED
     loadFileContent('q27.sql', 'q27sql');
 
     // Expected CSV: label,t1_value,t2_value
-    createChartFromCSV('chartQ28', 'groupedBar', 'q28_trend_data.csv');
+    createChartFromCSV('chartQ28', 'groupedBar', 'q28.csv'); // MODIFIED
     loadFileContent('q28.sql', 'q28sql');
 
     // Expected CSV: label,value
-    createChartFromCSV('chartQ29', 'bar', 'q29_data.csv', {}, true); // Horizontal bar
+    createChartFromCSV('chartQ29', 'bar', 'q29.csv', {}, true); // Horizontal bar // MODIFIED
     loadFileContent('q29.sql', 'q29sql');
 
     // Expected CSV: label,value
-    createChartFromCSV('chartQ30', 'bar', 'q30_data.csv', {}, true); // Horizontal bar
+    createChartFromCSV('chartQ30', 'bar', 'q30.csv', {}, true); // Horizontal bar // MODIFIED
     loadFileContent('q30.sql', 'q30sql');
 
 });

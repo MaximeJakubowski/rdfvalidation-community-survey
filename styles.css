@@ -1,34 +1,240 @@
+/* styles.css - Minimal Edits - Integrated Inline Styles */
+
 body {
-    font-family: sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
     line-height: 1.6;
+    color: #212529;
+    background-color: #ffffff;
     padding: 20px;
-    max-width: 1000px;
+    max-width: 800px;
     margin: auto;
 }
 
-h1, h2, h3 {
-    color: #333;
+h1, h2, h4 { /* Removed h3 from this group */
+    margin-top: 1.5em;
+    margin-bottom: 0.8em;
+    line-height: 1.3;
 }
 
 h1 {
-    border-bottom: 2px solid #eee;
+    color: #212529; /* Darkest grey */
+    border-bottom: 2px solid #dee2e6;
     padding-bottom: 10px;
+    font-size: 2.2em;
+    margin-top: 0;
 }
 
 h2 {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 5px;
+    color: #343a40; /* Dark grey */
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 8px;
+    font-size: 1.8em;
     margin-top: 40px;
 }
 
+/* Original h3 style - keep for reference or potential reuse if needed elsewhere */
+/*
 h3 {
+    color: #495057;
+    border-bottom: 1px dotted #dee2e6;
+    padding-bottom: 4px;
+    font-size: 1.4em;
     margin-top: 30px;
-    color: #555;
+}
+*/
+
+h4 {
+    color: #6c757d; /* Medium grey */
+    font-size: 1.1em;
+    margin-top: 25px;
+    /* Add some padding below h4 when it's inside a details section */
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+a {
+    color: #D68614; /* Custom link color */
+    text-decoration: underline;
+}
+
+a:hover,
+a:focus {
+    color: #B7372E; /* Custom hover color */
+    text-decoration: underline;
 }
 
 .chart-container {
-    max-width: 800px; 
+    max-width: 700px;
+    /* Adjusted margin to fit better within padded details */
     margin: 20px auto;
-    border: 1px solid #eee; 
+    border: 1px solid #e9ecef;
+    background-color: #ffffff;
+    padding: 15px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+    /* Add margin left/right when inside details */
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+/* Style for the main section collapsible containers */
+details.section-details {
+    margin: 25px 0; /* Increased margin between sections */
+    border: 1px solid #dee2e6; /* Slightly stronger border */
+    border-radius: 4px;
+    background-color: #ffffff;
+    overflow: hidden; /* Helps contain borders/background */
+}
+
+/* Style for the summary element acting as the section header */
+details.section-details > summary {
+    padding: 12px 15px; /* Slightly more padding */
+    cursor: pointer;
+    font-weight: 600; /* Make it bolder like a header */
+    background-color: #f8f9fa; /* Light background for the header */
+    border-bottom: 1px solid #dee2e6; /* Separator line */
+    /* list-style: none; */ /* <-- REMOVED/COMMENTED OUT to allow marker */
+}
+/* details.section-details > summary::-webkit-details-marker { display: none; } */ /* <-- REMOVED/COMMENTED OUT to allow marker */
+
+/* Style the H3 specifically when it's inside the section summary */
+details.section-details > summary h3 {
+    display: inline; /* Allow it to sit naturally in the summary */
+    color: #495057; /* Use original h3 color */
+    border-bottom: none; /* Remove original h3 border */
+    padding-bottom: 0; /* Remove original h3 padding */
+    font-size: 1.4em; /* Keep original h3 font size */
+    margin: 0; /* Remove original h3 margins */
+    line-height: 1.3; /* Keep original line height */
+}
+
+/* Optional: Add and style the default marker */
+details.section-details > summary::marker {
+    color: #3d3d3d; /* Example: Use your link color */
+    font-size: 1em; /* Example: Make it slightly smaller */
+    /* You can try 'content' but browser support varies widely */
+    /* content: "▼ "; */ /* Example: replace with a down arrow when open (might need [open] selector) */
+}
+
+/* Hover effect for the main section summary */
+details.section-details > summary:hover {
+    background-color: #e9ecef; /* Darker hover background */
+    /* opacity: 0.8; */ /* Using background color change instead of opacity from inline style */
+}
+
+
+/* Add padding to the content *inside* the main section details */
+details.section-details > *:not(summary) {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* Padding left/right is handled by h4 and chart-container individually now */
+}
+
+
+/* Style for the nested details (SQL query) */
+details.section-details details {
+    margin: 15px; /* Margin inside the parent details */
+    border: 1px dashed #ced4da; /* Dashed border to differentiate */
+    border-radius: 4px;
+    background-color: #f8f9fa; /* Slightly different background */
+}
+
+details.section-details details > summary {
+    padding: 8px 12px; /* Smaller padding */
+    cursor: pointer;
+    font-weight: 500; /* Normal weight */
+    background-color: transparent; /* No background */
+    border-bottom: none; /* No border */
+    font-size: 0.9em; /* Smaller font */
+    color: #6c757d; /* Medium grey text */
+    list-style: revert; /* Use default marker if desired, or keep none */
+    position: relative; /* Needed for positioning copy button if moved here */
+}
+/* Keep webkit marker hidden if list-style: none is used above */
+/* details.section-details details > summary::-webkit-details-marker { display: none; } */
+
+
+details.section-details details > summary:hover {
+    background-color: #e9ecef; /* Subtle hover */
+}
+
+/* Style for the pre tag inside the nested SQL details */
+details.section-details details > pre {
+    background-color: #e9ecef;
+    border-top: 1px dashed #ced4da; /* Match dashed border */
+    padding: 12px;
+    margin: 0;
+    overflow-x: auto;
+    font-size: 0.9em;
+    border-radius: 0 0 3px 3px; /* Round bottom corners */
+}
+
+/* Clear float for elements after the summary containing the floated button */
+/* Applied specifically to the pre following the SQL summary */
+details.section-details details > pre {
+    clear: both;
+}
+/* If other elements could follow the summary, a more general rule might be needed */
+/* details > *:not(summary) { clear: both; } */ /* This is too broad */
+
+
+code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    color: #343a40;
+}
+
+p {
+    margin-bottom: 1em;
+     /* Add padding when p is directly inside details */
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* --- Global Controls --- */
+.global-controls {
+    margin-bottom: 1.5em; /* Kept from original styles.css */
+    padding: 10px 0; /* Kept from original styles.css */
+}
+
+.global-controls button {
+    margin-right: 8px; /* Kept from original styles.css */
+    padding: 8px 15px; /* Kept from original styles.css */
+    cursor: pointer;
+    background-color: #6c757d; /* Kept from original styles.css */
+    color: white; /* Kept from original styles.css */
+    border: none; /* Kept from original styles.css */
+    border-radius: 4px; /* Kept from original styles.css */
+    font-size: 0.9em; /* Kept from original styles.css */
+    transition: background-color 0.2s ease; /* Kept from original styles.css */
+}
+
+.global-controls button:hover {
+    background-color: #495057; /* Kept from original styles.css */
+}
+
+.global-controls button:last-child {
+    margin-right: 0;
+}
+
+/* --- Copy Button Styling --- */
+.copy-sql-button {
+    margin-left: 10px;
+    padding: 3px 8px;
+    font-size: 0.8em;
+    cursor: pointer;
+    vertical-align: middle; /* Align with summary text */
+    float: right; /* Position to the right */
+    /* margin-top: -2px; */ /* Fine-tune vertical alignment if needed */
+    /* Add some button styling */
+    background-color: #adb5bd;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    line-height: 1.2; /* Adjust line height */
+}
+
+.copy-sql-button:hover {
+    background-color: #6c757d; /* Darker hover */
+    /* opacity: 0.8; */ /* Using background color change */
 }
 

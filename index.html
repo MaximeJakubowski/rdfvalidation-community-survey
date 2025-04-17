@@ -11,291 +11,406 @@
 
 <h1>Validating RDF Data: a Community Survey</h1>
 <p>This webpage gives an overview of the results from the RDF Validation Survey,
-specifically for the answers collected between December 2024 and March 2025.</p>
-
-<p>All graphs have been generated based on the cleaned data available as 
-    <a href="">CSV files</a>, or a ready-made <a href="">DuckDB file</a>. 
-    You can find the SQL queries retrieving the data for the graphs below 
-    every graph. Try them out in our <a href="databaseshell.html">database shell</a> 
-    directly in the browser!
+specifically for the answers collected between December 2024 and March 2025.
+The survey itself is still available
+<a href="https://forms.gle/SY5PGNXbFTxaT4bi8" target="_blank">here</a>.</p> <p>All graphs have been generated based on the cleaned data available as
+    <a href="">CSV files</a>, or a ready-made <a href="">DuckDB file</a>. You can find the SQL queries retrieving the data for the graphs below
+    every graph. Try them out in our <a href="databaseshell.html" target="_blank">database shell</a> directly in the browser: copy the SQL queries associated with the charts and paste them in the DuckDB browser shell!
 </p>
 
 <h2>Highlighted Insights</h2>
 <p>TODO: here we will highlight the same graphs as in the paper</p>
 
-<h2>Overview per Question</h2>
-
-<h3>Question 1: What is your professional background?</h3>
-<div class="chart-container">
-    <canvas id="chartQ01"></canvas>
+<h2>Overview</h2>
+<div class="global-controls">
+    <button id="expand-all">Expand All Sections</button>
+    <button id="collapse-all">Collapse All Sections</button>
 </div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code id="q01sql">CONTENT NOT LOADED.</code></pre>
+
+<details open class="section-details">
+    <summary><h3>1 Background and Demographics</h3></summary>
+    <h4>Question 1: What is your professional background?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ01"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q01sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q01sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 2: How many years of experience do you have with RDF validation/shape technologies?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ02"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q02sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q02sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 3: Do you work with different graph models or RDF standards? Please select all that apply.</h4>
+    <div class="chart-container">
+        <canvas id="chartQ03"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q03sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q03sql">SHOW TABLES;</code></pre>
+    </details>
 </details>
 
-<h3>Question 2: How many years of experience do you have with RDF validation/shape technologies?</h3>
-<div class="chart-container">
-    <canvas id="chartQ02"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
+
+<details open class="section-details">
+    <summary><h3>2 Usage Context and Specifics</h3></summary>
+    <h4>Question 4: What RDF validation technologies do you have experience with? Please select all that apply.</h4>
+    <div class="chart-container">
+        <canvas id="chartQ04"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q04sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q04sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 5: How frequently do you work with RDF shape languages?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ05"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q05sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q05sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 6: What are the main data domains you use SHACL or ShEx for? Please select all that apply.</h4>
+    <div class="chart-container">
+        <canvas id="chartQ06"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q06sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q06sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 7: In your projects, how do SHACL and ShEx affect data quality and consistency?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ07"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q07sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q07sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 8: If you had to choose one language for future projects, which would it be?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ08"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q08sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q08sql">SHOW TABLES;</code></pre>
+    </details>
 </details>
 
-<h3>Question 3: Do you work with different graph models or RDF standards? Please select all that apply.</h3>
-<div class="chart-container">
-    <canvas id="chartQ03"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
+
+<details open class="section-details">
+    <summary><h3>3 Validation Usage</h3></summary>
+    <h4>Question 9: When validating, how many distinct classes and properties does your data graph usually have?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ09"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q09sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q09sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 10: When validating, how large is your RDF graph usually?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ10"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q10sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q10sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 11: If you are a user of SHACL, which validation software/framework do you use?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ11"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q11sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q11sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 12: If you are a user of ShEx, which validation software/framework do you use?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ12"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q12sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q12sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 13: What do you consider the main advantages of SHACL/ShEx in your work or projects? Please select all that apply.</h4>
+    <div class="chart-container">
+        <canvas id="chartQ13"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q13sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q13sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 14: Have you encountered any limitations or challenges when using SHACL/ShEx?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ14"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q14sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q14sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 15: Have you worked with evolving or dynamic RDF knowledge graphs? If yes, how do you adapt your validation processes?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ15"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q15sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q15sql">SHOW TABLES;</code></pre>
+    </details>
 </details>
 
-<h3>Question 4: What RDF validation technologies do you have experience with? Please select all that apply.</h3>
-<div class="chart-container">
-    <canvas id="chartQ04"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
+
+<details open class="section-details">
+    <summary><h3>4 Specific Features of SHACL</h3></summary>
+    <h4>Question 16: How often do you use SHACL-core constraint components (for example sh:mincount etc)?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ16"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q16sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q16sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 17: Do you use SPARQL-based constraint components?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ17"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q17sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q17sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 18: If you use SPARQL-based constraint components, please specify the reason:</h4>
+    <div class="chart-container">
+        <canvas id="chartQ18"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q18sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q18sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 19: Is the information provided by the validation report sufficient for your use cases?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ19"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q19sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q19sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 20: Which of the SHACL advanced features do you use?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ20"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q20sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q20sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 21: Which extensions of the SHACL standard do you wish for?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ21"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q21sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q21sql">SHOW TABLES;</code></pre>
+    </details>
 </details>
 
-<h3>Question 5: How frequently do you work with RDF shape languages?</h3>
-<div class="chart-container">
-    <canvas id="chartQ05"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
+
+<details open class="section-details">
+    <summary><h3>5 Shape Creation and Extraction</h3></summary>
+    <h4>Question 22: How do you generate validating shapes SHACL/ShEx?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ22"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q22sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q22sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 23: Which tools or method do you use to extract/create validating shapes (SHACL/ShEx)?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ23"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q23sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q23sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 24: How many shapes do you usually generate?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ24"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q24sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q24sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 25: How large is your ontology usually in the context of shape extraction?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ25"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q25sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q25sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 26: How many distinct predicate types are present in your RDF graph usually?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ26"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q26sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q26sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 27: How large is your RDF graph usually in the context of shape extraction?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ27"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q27sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q27sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 28: Do you generate shapes for the entire graph or only for some portions?</h4>
+    <div class="chart-container">
+        <canvas id="chartQ28"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q28sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q28sql">SHOW TABLES;</code></pre>
+    </details>
 </details>
 
-<h3>Question 6: What are the main data domains you use SHACL or ShEx for? Please select all that apply.</h3>
-<div class="chart-container">
-    <canvas id="chartQ06"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
+
+<details open class="section-details">
+    <summary><h3>6 Future Development</h3></summary>
+    <h4>Question 29: What are the shortcomings you experienced when working with SHACL/ShEx? Please select all that apply.</h4>
+    <div class="chart-container">
+        <canvas id="chartQ29"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q29sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q29sql">SHOW TABLES;</code></pre>
+    </details>
+
+    <h4>Question 30: What features would improve the usefulness of validation reports? Please select all that apply.</h4>
+    <div class="chart-container">
+        <canvas id="chartQ30"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="q30sql">Copy SQL</button>
+        </summary>
+        <pre><code id="q30sql">SHOW TABLES;</code></pre>
+    </details>
 </details>
 
-<h3>Question 7: In your projects, how do SHACL and ShEx affect data quality and consistency?</h3>
-<div class="chart-container">
-    <canvas id="chartQ07"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 8: If you had to choose one language for future projects, which would it be?</h3>
-<div class="chart-container">
-    <canvas id="chartQ08"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 9: When validating, how many distinct classes and properties does your data graph usually have?</h3>
-<div class="chart-container">
-    <canvas id="chartQ09"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 10: When validating, how large is your RDF graph usually?</h3>
-<div class="chart-container">
-    <canvas id="chartQ10"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 11: If you are a user of SHACL, which validation software/framework do you use?</h3>
-<div class="chart-container">
-    <canvas id="chartQ11"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 12: If you are a user of ShEx, which validation software/framework do you use?</h3>
-<div class="chart-container">
-    <canvas id="chartQ12"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 13: What do you consider the main advantages of SHACL/ShEx in your work or projects? Please select all that apply.</h3>
-<div class="chart-container">
-    <canvas id="chartQ13"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 14: Have you encountered any limitations or challenges when using SHACL/ShEx?</h3>
-<div class="chart-container">
-    <canvas id="chartQ14"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 15: Have you worked with evolving or dynamic RDF knowledge graphs? If yes, how do you adapt your validation processes?</h3>
-<div class="chart-container">
-    <canvas id="chartQ15"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 16: How often do you use SHACL-core constraint components (for example sh:mincount etc)?</h3>
-<div class="chart-container">
-    <canvas id="chartQ16"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 17: Do you use SPARQL-based constraint components?</h3>
-<div class="chart-container">
-    <canvas id="chartQ17"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 18: If you use SPARQL-based constraint components, please specify the reason:</h3>
-<div class="chart-container">
-    <canvas id="chartQ18"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 19: Is the information provided by the validation report sufficient for your use cases?</h3>
-<div class="chart-container">
-    <canvas id="chartQ19"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 20: Which of the SHACL advanced features do you use?</h3>
-<div class="chart-container">
-    <canvas id="chartQ20"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 21: Which extensions of the SHACL standard do you wish for?</h3>
-<div class="chart-container">
-    <canvas id="chartQ21"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 22: How do you generate validating shapes SHACL/ShEx?</h3>
-<div class="chart-container">
-    <canvas id="chartQ22"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 23: Which tools or method do you use to extract/create validating shapes (SHACL/ShEx)?</h3>
-<div class="chart-container">
-    <canvas id="chartQ23"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 24: How many shapes do you usually generate?</h3>
-<div class="chart-container">
-    <canvas id="chartQ24"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 25: How large is your ontology usually in the context of shape extraction?</h3>
-<div class="chart-container">
-    <canvas id="chartQ25"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 26: How many distinct predicate types are present in your RDF graph usually?</h3>
-<div class="chart-container">
-    <canvas id="chartQ26"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 27: How large is your RDF graph usually in the context of shape extraction?</h3>
-<div class="chart-container">
-    <canvas id="chartQ27"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 28: Do you generate shapes for the entire graph or only for some portions?</h3>
-<div class="chart-container">
-    <canvas id="chartQ28"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 29: What are the shortcomings you experienced when working with SHACL/ShEx? Please select all that apply.</h3>
-<div class="chart-container">
-    <canvas id="chartQ29"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
-<h3>Question 30: What features would improve the usefulness of validation reports? Please select all that apply.</h3>
-<div class="chart-container">
-    <canvas id="chartQ30"></canvas>
-</div>
-<details>
-    <summary>Show/Hide Source SQL Query</summary>
-    <pre><code>SHOW TABLES;</code></pre>
-</details>
-
+<script src="general.js" defer></script>
 <script src="surveyoverview_charts.js" defer></script>
-
 </body>
 </html>
