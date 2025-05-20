@@ -1,0 +1,15 @@
+"Tool","Academia","Industry","Both"
+"Apache Jena SHACL",16,12,12
+"Corese SHACL",2,0,0
+"Not Applicable",6,0,2
+"Other",1,2,3
+"PySHACL",17,8,13
+"RDF4J",10,6,3
+"RDFLib SHACL",0,0,1
+"Stardog SHACL",0,1,1
+"TopBraid Composer/EDG",10,9,6
+"maplib",1,2,0
+"rdf-validate-shacl",1,5,3
+"rudof",1,0,0
+"shacl-engine",3,2,4
+"shacl-js",4,0,4

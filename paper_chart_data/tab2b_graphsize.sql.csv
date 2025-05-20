@@ -1,0 +1,5 @@
+"Graph Size","Academia","Industry","Both"
+"1 to 100K triples",22,7,14
+"100K to 1M triples",8,6,3
+"1M to 100M triples",8,7,4
+"More than 100M triples",4,3,3
