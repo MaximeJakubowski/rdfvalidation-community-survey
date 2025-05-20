@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const expandBtn = document.getElementById('expand-all');
     const collapseBtn = document.getElementById('collapse-all');
-    // Select only the top-level details elements meant for sections
+
     const allSectionDetails = document.querySelectorAll('details.section-details');
 
     if (expandBtn) {
@@ -21,32 +21,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Add JavaScript for Copy to Clipboard functionality
     const copyButtons = document.querySelectorAll('.copy-sql-button');
 
     copyButtons.forEach(button => {
         button.addEventListener('click', (event) => {
-            event.preventDefault(); // Prevent details toggling if inside summary
-            event.stopPropagation(); // Stop event bubbling up
+            event.preventDefault(); 
+            event.stopPropagation(); 
 
             const targetId = button.getAttribute('data-target');
             const codeElement = document.getElementById(targetId);
 
             if (codeElement) {
-                const textToCopy = codeElement.textContent || codeElement.innerText; // Get text content
+                const textToCopy = codeElement.textContent || codeElement.innerText;
 
                 navigator.clipboard.writeText(textToCopy).then(() => {
-                    // Success feedback: change button text temporarily
                     const originalText = button.textContent;
                     button.textContent = 'Copied!';
-                    button.disabled = true; // Optional: disable button briefly
+                    button.disabled = true; 
                     setTimeout(() => {
                         button.textContent = originalText;
                         button.disabled = false;
-                    }, 1500); // Revert after 1.5 seconds
+                    }, 1500); 
                 }).catch(err => {
                     console.error('Failed to copy text: ', err);
-                    // Optional: Provide error feedback to the user
                     alert('Failed to copy SQL. Please copy manually.');
                 });
             } else {

@@ -1,5 +1,5 @@
 // --- Configuration ---
-const dataDir = 'chart_data/'; // Directory where CSV files are stored
+const dataDir = ''; 
 
 async function loadFileContent(filePath, elementId) {
     const targetElement = document.getElementById(elementId);
@@ -9,24 +9,15 @@ async function loadFileContent(filePath, elementId) {
     }
 
     try {
-        const response = await fetch(dataDir + filePath);
-
+        const response = await fetch(filePath);
         if (!response.ok) {
-            // Handle HTTP errors (like file not found - 404)
-            throw new Error(`HTTP error: ${response.status}. Could not load content.`);
+            throw new Error(`HTTP error: ${response.status}. Could not load content from ${filePath}.`);
         }
-
-        // Get the file content as text
         const fileText = await response.text();
-
-        // Display the text content in the target element
-        // Using textContent is generally safer as it doesn't parse HTML
         targetElement.textContent = fileText;
-
         console.log(`Successfully loaded content from ${filePath} into #${elementId}`);
 
     } catch (error) {
-        // Handle fetch errors (network issues) or HTTP errors
         console.error('Error loading file content:', error);
         targetElement.textContent = `Error loading file: ${error.message}`;
     }
@@ -35,61 +26,59 @@ async function loadFileContent(filePath, elementId) {
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM fully loaded and parsed");
 
-    // Helper function for chart colors
     const chartColors = [
         'rgba(255, 99, 132, 0.8)', 'rgba(54, 162, 235, 0.8)', 'rgba(255, 206, 86, 0.8)',
         'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)', 'rgba(255, 159, 64, 0.8)',
         'rgba(199, 199, 199, 0.8)', 'rgba(83, 102, 255, 0.8)', 'rgba(40, 159, 64, 0.8)',
-        'rgba(210, 99, 132, 0.8)', 'rgba(45, 210, 255, 0.8)', 'rgba(255, 130, 50, 0.8)' // Added more colors
+        'rgba(210, 99, 132, 0.8)', 'rgba(45, 210, 255, 0.8)', 'rgba(255, 130, 50, 0.8)'
     ];
 
-    const chartColorsT1 = 'rgba(54, 162, 235, 0.6)'; // Blue T1
-    const chartColorsT2 = 'rgba(255, 99, 132, 0.6)'; // Red T2
+    const chartColorsT1 = 'rgba(54, 162, 235, 0.6)';
+    const chartColorsT2 = 'rgba(255, 99, 132, 0.6)';
 
-    /**
-     * Basic CSV parser
-     * Assumes comma-separated values, handles simple quotes.
-     * Returns array of objects, using the first row as headers.
-     * @param {string} text - The CSV text content.
-     * @returns {Array<Object>} Parsed data.
-     */
     function parseCSV(text) {
         const lines = text.trim().split('\n');
-        if (lines.length < 2) return []; // Needs header + at least one data row
+        if (lines.length === 0) return [];
 
-        // Basic header parsing (handles simple quotes if present)
         const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
         const data = [];
 
         for (let i = 1; i < lines.length; i++) {
-            const values = lines[i].split(','); // Simplistic split, may break with commas inside quotes
+            const values = [];
+            let currentVal = '';
+            let inQuotes = false;
+            for (let char of lines[i]) {
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    values.push(currentVal.trim().replace(/^"|"$/g, ''));
+                    currentVal = '';
+                } else {
+                    currentVal += char;
+                }
+            }
+            values.push(currentVal.trim().replace(/^"|"$/g, ''));
+
             if (values.length === headers.length) {
                 const entry = {};
                 for (let j = 0; j < headers.length; j++) {
-                    entry[headers[j]] = values[j].trim().replace(/^"|"$/g, '');
+                    entry[headers[j]] = values[j];
                 }
                 data.push(entry);
+            } else {
+                console.warn(`Skipping line ${i+1} in CSV due to mismatched column count. Expected ${headers.length}, got ${values.length}. Line: ${lines[i]}`);
             }
         }
         return data;
     }
 
-    /**
-     * Fetches CSV data and creates a Chart.js chart.
-     * @param {string} canvasId - The ID of the canvas element.
-     * @param {string} chartType - Type of chart ('bar', 'pie', 'doughnut', 'groupedBar').
-     * @param {string} csvFilename - Filename of the CSV data source.
-     * @param {object} [chartOptions={}] - Optional Chart.js options.
-     * @param {boolean} [horizontal=false] - For bar charts, make it horizontal.
-     */
     async function createChartFromCSV(canvasId, chartType, csvFilename, chartOptions = {}, horizontal = false) {
         const ctx = document.getElementById(canvasId);
         if (!ctx) {
             console.error(`Canvas element with ID ${canvasId} not found.`);
             return;
         }
-
-        const csvPath = `${dataDir}${csvFilename}`;
+        const csvPath = csvFilename;
         console.log(`Attempting to load data for ${canvasId} from ${csvPath}`);
 
         try {
@@ -102,23 +91,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!parsedData || parsedData.length === 0) {
                  console.error(`No data parsed from ${csvPath} for ${canvasId}. Check CSV format.`);
-                 ctx.parentElement.innerHTML += `<p style="color:red;">Error loading data for chart ${canvasId}. Check ${csvPath}.</p>`;
+                 if (ctx.parentElement) {
+                    ctx.parentElement.innerHTML += `<p style="color:red;">Error loading data for chart ${canvasId}. CSV empty or unreadable from ${csvPath}.</p>`;
+                 }
                  return;
             }
-
             console.log(`Data loaded for ${canvasId}:`, parsedData);
 
             let config;
             const defaultOptions = {
                 responsive: true,
-                maintainAspectRatio: true, // Adjust as needed, maybe false for horizontal bars
+                maintainAspectRatio: true, // Default, will be overridden for pie/doughnut
                 plugins: {
-                    legend: { display: chartType !== 'pie' && chartType !== 'doughnut' } // Hide legend for single-dataset pie/doughnut
+                    legend: { display: true }
                 }
             };
+            
+            const headers = Object.keys(parsedData[0]);
 
-            if (chartType === 'groupedBar') {
-                // Expected CSV Headers: label, t1_value, t2_value
+            if (chartType === 'groupedBar') { // For original survey charts with t1_value, t2_value
                  if (!parsedData[0].hasOwnProperty('label') || !parsedData[0].hasOwnProperty('t1_value') || !parsedData[0].hasOwnProperty('t2_value')) {
                     throw new Error(`CSV ${csvFilename} missing required headers (label, t1_value, t2_value) for groupedBar chart.`);
                  }
@@ -128,14 +119,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         labels: parsedData.map(row => row.label),
                         datasets: [
                             {
-                                label: 'T1 (Historical)',
+                                label: headers.includes('t1_label') ? parsedData[0].t1_label : 'T1 (Historical)',
                                 data: parsedData.map(row => parseFloat(row.t1_value) || 0),
                                 backgroundColor: chartColorsT1,
                                 borderColor: chartColorsT1.replace('0.6', '1'),
                                 borderWidth: 1
                             },
                             {
-                                label: 'T2 (Current)',
+                                label: headers.includes('t2_label') ? parsedData[0].t2_label : 'T2 (Current)',
                                 data: parsedData.map(row => parseFloat(row.t2_value) || 0),
                                 backgroundColor: chartColorsT2,
                                 borderColor: chartColorsT2.replace('0.6', '1'),
@@ -145,166 +136,282 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     options: { ...defaultOptions, indexAxis: horizontal ? 'y' : 'x', scales: { [horizontal ? 'x' : 'y']: { beginAtZero: true } }, ...chartOptions }
                 };
-            } else {
-                 // Expected CSV Headers: label, value
+            } else if (chartType === 'groupedBarPaper') { // For paper bar charts (can be single or multi-series)
+                if (headers.length < 2) { 
+                    throw new Error(`CSV ${csvFilename} needs at least a label column and one value column for groupedBarPaper. Found headers: ${headers.join(', ')}`);
+                }
+                const labelColumn = headers[0]; 
+                const datasets = [];
+                for (let k = 1; k < headers.length; k++) { 
+                    datasets.push({
+                        label: headers[k], 
+                        data: parsedData.map(row => parseFloat(row[headers[k]]) || 0),
+                        backgroundColor: chartColors[(k - 1) % chartColors.length],
+                        borderColor: chartColors[(k - 1) % chartColors.length].replace(/0\.\d+\)/, '1)'),
+                        borderWidth: 1
+                    });
+                }
+                config = {
+                    type: 'bar',
+                    data: {
+                        labels: parsedData.map(row => row[labelColumn]),
+                        datasets: datasets
+                    },
+                    options: { 
+                        ...defaultOptions, 
+                        indexAxis: horizontal ? 'y' : 'x', 
+                        scales: { [horizontal ? 'x' : 'y']: { beginAtZero: true } }, 
+                        ...chartOptions, 
+                        plugins: { 
+                            ...defaultOptions.plugins,
+                            legend: {display: datasets.length > 1 || horizontal } 
+                        } 
+                    }
+                };
+            } else if (chartType === 'pie' || chartType === 'doughnut') { // For all pie/doughnut charts
+                let labelKey = 'label';
+                let valueKey = 'value';
+                let datasetLabel = canvasId; 
+
+                if (headers.length < 2) {
+                    throw new Error(`CSV ${csvFilename} must have at least two columns for ${chartType} chart. Found headers: ${headers.join(', ')}`);
+                }
+
+                if (csvFilename.includes('paper_chart_data/')) {
+                    labelKey = headers[0];
+                    valueKey = headers[1];
+                    datasetLabel = valueKey; 
+                } else {
+                    if (!headers.includes('label') || !headers.includes('value')) {
+                        throw new Error(`Original survey CSV ${csvFilename} missing required headers ('label', 'value') for ${chartType} chart. Found: ${headers.join(', ')}`);
+                    }
+                }
+                
+                if (!parsedData[0].hasOwnProperty(labelKey) || !parsedData[0].hasOwnProperty(valueKey)) {
+                     throw new Error(`CSV ${csvFilename} does not have the determined columns for label ('${labelKey}') or value ('${valueKey}'). Headers found: ${headers.join(', ')}`);
+                }
+
+                config = {
+                    type: chartType,
+                    data: {
+                        labels: parsedData.map(row => row[labelKey]),
+                        datasets: [{
+                            label: datasetLabel, 
+                            data: parsedData.map(row => parseFloat(row[valueKey]) || 0),
+                            backgroundColor: chartColors.slice(0, parsedData.length),
+                        }]
+                    },
+                    options: { 
+                        ...defaultOptions,
+                        maintainAspectRatio: false, 
+                        plugins: {
+                            ...defaultOptions.plugins,
+                            title: chartOptions.plugins && chartOptions.plugins.title ? chartOptions.plugins.title : { display: false } 
+                        }
+                    }
+                 };
+                 config.options.plugins.legend.display = true;
+            } else if (chartType === 'bar') { // For simple bar charts from original survey data (qXX.csv)
                  if (!parsedData[0].hasOwnProperty('label') || !parsedData[0].hasOwnProperty('value')) {
-                    throw new Error(`CSV ${csvFilename} missing required headers (label, value) for ${chartType} chart.`);
+                    throw new Error(`Simple bar chart CSV ${csvFilename} (from original survey) missing required headers ('label', 'value'). Found: ${headers.join(', ')}`);
                  }
                 config = {
-                    type: chartType === 'bar' || chartType === 'pie' || chartType === 'doughnut' ? chartType : 'bar', // Default to bar if type is unknown simple chart
+                    type: 'bar',
                     data: {
                         labels: parsedData.map(row => row.label),
                         datasets: [{
-                            label: canvasId, // Use canvasId as a default label
+                            label: headers.includes('value') ? 'Value' : headers[1], 
                             data: parsedData.map(row => parseFloat(row.value) || 0),
-                            backgroundColor: chartType === 'pie' || chartType === 'doughnut' ? chartColors.slice(0, parsedData.length) : chartColors[0], // Use multiple colors for pie/doughnut
-                            borderColor: chartType === 'bar' ? chartColors[0].replace('0.8', '1') : undefined,
-                            borderWidth: chartType === 'bar' ? 1 : undefined
+                            backgroundColor: chartColors[0],
+                            borderColor: chartColors[0].replace('0.8', '1'),
+                            borderWidth: 1
                         }]
                     },
-                    options: { ...defaultOptions, indexAxis: horizontal ? 'y' : 'x', scales: (chartType === 'bar' ? { [horizontal ? 'x' : 'y']: { beginAtZero: true } } : {}), ...chartOptions }
-                 };
-                 // Specific overrides for pie/doughnut legends might be needed
-                 if (chartType === 'pie' || chartType === 'doughnut') {
-                    config.options.plugins.legend.display = true; // Usually want legend for pie
-                 } else if (chartType === 'bar' && !horizontal) {
-                    config.options.plugins.legend.display = false; // Hide legend for simple vertical bar
-                 } else if (chartType === 'bar' && horizontal) {
-                    config.options.plugins.legend.display = false; // Hide legend for simple horizontal bar
+                    options: { 
+                        ...defaultOptions, 
+                        indexAxis: horizontal ? 'y' : 'x', 
+                        scales: { [horizontal ? 'x' : 'y']: { beginAtZero: true } }, 
+                        ...chartOptions,
+                        plugins: {
+                            ...defaultOptions.plugins,
+                            legend: {display: false} 
+                        }
+                    }
+                };
+                 if (horizontal) {
+                    config.options.plugins.legend.display = true; 
                  }
+            } else {
+                throw new Error(`Unsupported chart type: ${chartType} for ${csvFilename}`);
             }
 
             new Chart(ctx.getContext('2d'), config);
             console.log(`Chart created for ${canvasId}`);
 
         } catch (error) {
-            console.error(`Failed to create chart for ${canvasId}:`, error);
-             ctx.parentElement.innerHTML += `<p style="color:red;">Error loading data for chart ${canvasId}: ${error.message}.</p>`;
+            console.error(`Failed to create chart for ${canvasId} from ${csvPath}:`, error);
+            if (ctx.parentElement) {
+                ctx.parentElement.innerHTML += `<p style="color:red;">Error creating chart ${canvasId}: ${error.message}.</p>`;
+            }
         }
     }
 
-    // --- Initialize Charts ---
-    // Call createChartFromCSV for each question, specifying the correct CSV filename and chart type.
-    // Trend charts use 'groupedBar'. Single-select distributions often use 'pie' or 'bar'. Multi-select frequencies use 'bar'.
+    async function createTableFromCSV(tableId, csvFilename, sqlQueryId, sqlFilename) {
+        const tableElement = document.getElementById(tableId);
+        if (!tableElement) {
+            console.error(`Table element with ID ${tableId} not found.`);
+            return;
+        }
 
-    // Expected CSV: label,t1_value,t2_value
-    createChartFromCSV('chartQ01', 'groupedBar', 'q01.csv');
-    loadFileContent('q01.sql', 'q01sql');
+        if (sqlQueryId && sqlFilename) {
+            await loadFileContent(sqlFilename, sqlQueryId);
+        }
 
-    // Expected CSV: label,value
-    createChartFromCSV('chartQ02', 'pie', 'q02.csv');
-    loadFileContent('q02.sql', 'q02sql');
+        const csvPath = csvFilename;
+        try {
+            const response = await fetch(csvPath);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status} while fetching ${csvPath}`);
+            }
+            const csvText = await response.text();
+            const parsedData = parseCSV(csvText);
 
-    // Expected CSV: label,value
-    createChartFromCSV('chartQ03', 'bar', 'q03.csv', {}, true); // Horizontal bar
-    loadFileContent('q03.sql', 'q03sql');
+            if (!parsedData || parsedData.length === 0) {
+                console.error(`No data parsed from ${csvPath} for ${tableId}. Check CSV format.`);
+                tableElement.innerHTML = '<thead><tr><th>Error</th></tr></thead><tbody><tr><td>No data found or error in CSV.</td></tr></tbody>';
+                return;
+            }
 
-    // Expected CSV: label,value
-    createChartFromCSV('chartQ04', 'bar', 'q04.csv', {}, true); // Horizontal bar
-    loadFileContent('q04.sql', 'q04sql');
+            const headers = Object.keys(parsedData[0]);
+            let html = '<thead><tr>';
+            headers.forEach(header => {
+                html += `<th>${header.replace(/_/g, ' ')}</th>`;
+            });
+            html += '</tr></thead>';
 
-    // Expected CSV: label,value
-    createChartFromCSV('chartQ05', 'pie', 'q05.csv');
-    loadFileContent('q05.sql', 'q05sql');
+            html += '<tbody>';
+            parsedData.forEach(row => {
+                html += '<tr>';
+                headers.forEach(header => {
+                    html += `<td>${row[header]}</td>`;
+                });
+                html += '</tr>';
+            });
+            html += '</tbody>';
 
-    // Expected CSV: label,value
-    createChartFromCSV('chartQ06', 'bar', 'q06.csv', {}, true); // Horizontal bar
-    loadFileContent('q06.sql', 'q06sql');
+            tableElement.innerHTML = html;
+            console.log(`Table created for ${tableId}`);
 
-     // Expected CSV: label,value
-    createChartFromCSV('chartQ07', 'pie', 'q07.csv'); // Likert scale
-    loadFileContent('q07.sql', 'q07sql');
+        } catch (error) {
+            console.error(`Failed to create table for ${tableId}:`, error);
+            tableElement.innerHTML = `<thead><tr><th>Error</th></tr></thead><tbody><tr><td>Error loading data: ${error.message}</td></tr></tbody>`;
+        }
+    }
 
-     // Expected CSV: label,value
-    createChartFromCSV('chartQ08', 'pie', 'q08.csv');
-    loadFileContent('q08.sql', 'q08sql');
 
-    // Expected CSV: label,value
-    createChartFromCSV('chartQ09', 'bar', 'q09.csv');
-    loadFileContent('q09.sql', 'q09sql');
+    // Initialize PAPER Charts & Tables
+    createChartFromCSV('chartFig1a', 'groupedBarPaper', 'paper_chart_data/fig1a_professional_background.sql.csv', {plugins: {title: {display: true, text: 'Professional Background (2025 vs 2022)'}}});
+    loadFileContent('paper_chart_data/fig1a_professional_background.sql', 'fig1asql');
 
-     // Expected CSV: label,value
-    createChartFromCSV('chartQ10', 'bar', 'q10.csv');
-    loadFileContent('q10.sql', 'q10sql');
+    createChartFromCSV('chartFig1b', 'groupedBarPaper', 'paper_chart_data/fig1b_datadomains.sql.csv', {plugins: {title: {display: true, text: 'Application Domains'}}}, true);
+    loadFileContent('paper_chart_data/fig1b_datadomains.sql', 'fig1bsql');
 
-    // Expected CSV: label,value
-    createChartFromCSV('chartQ11', 'bar', 'q11.csv', {}, true); // Horizontal bar
-    loadFileContent('q11.sql', 'q11sql');
+    createChartFromCSV('chartFig1c', 'groupedBarPaper', 'paper_chart_data/fig1c_yearsofexperience.sql.csv', {plugins: {title: {display: true, text: 'Years of Experience by Background'}}});
+    loadFileContent('paper_chart_data/fig1c_yearsofexperience.sql', 'fig1csql');
 
-    // Expected CSV: label,value
-    createChartFromCSV('chartQ12', 'bar', 'q12.csv', {}, true); // Horizontal bar
-    loadFileContent('q12.sql', 'q12sql');
+    createChartFromCSV('chartFig1d', 'pie', 'paper_chart_data/fig1d_languagefamiliarity.sql.csv', {plugins: {title: {display: true, text: 'Language Familiarity'}}});
+    loadFileContent('paper_chart_data/fig1d_languagefamiliarity.sql', 'fig1dsql');
 
-    // Expected CSV: label,value
-    createChartFromCSV('chartQ13', 'bar', 'q13.csv', {}, true); // Horizontal bar // MODIFIED
-    loadFileContent('q13.sql', 'q13sql');
+    createChartFromCSV('chartFig2', 'groupedBarPaper', 'paper_chart_data/fig2_shapecreation.sql.csv', {plugins: {title: {display: true, text: 'Methods for Shape Creation (2025 vs 2022)'}}});
+    loadFileContent('paper_chart_data/fig2_shapecreation.sql', 'fig2sql');
+    
+    createChartFromCSV('chartFig3', 'groupedBarPaper', 'paper_chart_data/fig3_usagefrequency.sql.csv', {plugins: {title: {display: true, text: 'Validation Usage Frequency by Background'}}});
+    loadFileContent('paper_chart_data/fig3_usagefrequency.sql', 'fig3sql');
 
-    // Expected CSV: label,value
-    createChartFromCSV('chartQ14', 'bar', 'q14.csv', {}, true); // Horizontal bar // MODIFIED
-    loadFileContent('q14.sql', 'q14sql');
+    createChartFromCSV('chartFig4a', 'groupedBarPaper', 'paper_chart_data/fig4a_shaclsparql_usagefrequency.sql.csv', {plugins: {title: {display: true, text: 'SHACL-SPARQL Usage Frequency'}}}, true);
+    loadFileContent('paper_chart_data/fig4a_shaclsparql_usagefrequency.sql', 'fig4asql');
 
-    // Expected CSV: label,value
-    createChartFromCSV('chartQ15', 'pie', 'q15.csv'); // MODIFIED
-    loadFileContent('q15.sql', 'q15sql');
+    createChartFromCSV('chartFig4b', 'pie', 'paper_chart_data/fig4b_shaclsparql_motivation.sql.csv', {plugins: {title: {display: true, text: 'Motivation for SHACL-SPARQL Use'}}});
+    loadFileContent('paper_chart_data/fig4b_shaclsparql_motivation.sql', 'fig4bsql');
 
-     // Expected CSV: label,value
-    createChartFromCSV('chartQ16', 'pie', 'q16.csv'); // MODIFIED
-    loadFileContent('q16.sql', 'q16sql');
+    createChartFromCSV('chartFig5', 'pie', 'paper_chart_data/fig5_evolving.sql.csv', {plugins: {title: {display: true, text: 'Methods for Validating Evolving KGs'}}});
+    loadFileContent('paper_chart_data/fig5_evolving.sql', 'fig5sql');
 
-     // Expected CSV: label,value
-    createChartFromCSV('chartQ17', 'pie', 'q17.csv'); // MODIFIED
-    loadFileContent('q17.sql', 'q17sql');
+    createChartFromCSV('chartFig6a', 'groupedBarPaper', 'paper_chart_data/fig6a_graphsize_performance.sql.csv', {plugins: {title: {display: true, text: 'Graph Size vs. Performance Concerns'}}});
+    loadFileContent('paper_chart_data/fig6a_graphsize_performance.sql', 'fig6asql');
+    
+    createChartFromCSV('chartFig6b', 'groupedBarPaper', 'paper_chart_data/fig6b_usagefrequency_advancedfeatures.sql.csv', {plugins: {title: {display: true, text: 'Usage Frequency vs. Advanced Features Use'}}});
+    loadFileContent('paper_chart_data/fig6b_usagefrequency_advancedfeatures.sql', 'fig6bsql');
 
-    // Expected CSV: label,value
-    createChartFromCSV('chartQ18', 'bar', 'q18.csv', {}, true); // Horizontal bar // MODIFIED
-    loadFileContent('q18.sql', 'q18sql');
+    createTableFromCSV('tableTab1a', 'paper_chart_data/tab1a_shapeextraction.sql.csv', 'tab1asql', 'paper_chart_data/tab1a_shapeextraction.sql');
+    createTableFromCSV('tableTab1b', 'paper_chart_data/tab1b_shaclvalidators.sql.csv', 'tab1bsql', 'paper_chart_data/tab1b_shaclvalidators.sql');
+    createTableFromCSV('tableTab2a', 'paper_chart_data/tab2a_advancedfeature_background.sql.csv', 'tab2asql', 'paper_chart_data/tab2a_advancedfeature_background.sql');
+    createTableFromCSV('tableTab2b', 'paper_chart_data/tab2b_graphsize.sql.csv', 'tab2bsql', 'paper_chart_data/tab2b_graphsize.sql');
+    createTableFromCSV('tableTab3a', 'paper_chart_data/tab3a_advantages.sql.csv', 'tab3asql', 'paper_chart_data/tab3a_advantages.sql');
+    createTableFromCSV('tableTab3b', 'paper_chart_data/tab3b_limitations.sql.csv', 'tab3bsql', 'paper_chart_data/tab3b_limitations.sql');
+    createTableFromCSV('tableTab4a', 'paper_chart_data/tab4a_validationreport.sql.csv', 'tab4asql', 'paper_chart_data/tab4a_validationreport.sql');
+    createTableFromCSV('tableTab4b', 'paper_chart_data/tab4b_desiredfeature.sql.csv', 'tab4bsql', 'paper_chart_data/tab4b_desiredfeature.sql');
 
-    // Expected CSV: label,value
-    createChartFromCSV('chartQ19', 'pie', 'q19.csv'); // MODIFIED
-    loadFileContent('q19.sql', 'q19sql');
 
-    // Expected CSV: label,value
-    createChartFromCSV('chartQ20', 'bar', 'q20.csv', {}, true); // Horizontal bar // MODIFIED
-    loadFileContent('q20.sql', 'q20sql');
-
-    // Expected CSV: label,value
-    createChartFromCSV('chartQ21', 'bar', 'q21.csv', {}, true); // Horizontal bar // MODIFIED
-    loadFileContent('q21.sql', 'q21sql');
-
-     // Expected CSV: label,t1_value,t2_value
-    createChartFromCSV('chartQ22', 'groupedBar', 'q22.csv', {}, true); // Horizontal bar // MODIFIED
-    loadFileContent('q22.sql', 'q22sql');
-
-    // Expected CSV: label,t1_value,t2_value
-    createChartFromCSV('chartQ23', 'groupedBar', 'q23.csv', {}, true); // Horizontal bar // MODIFIED
-    loadFileContent('q23.sql', 'q23sql');
-
-    // Expected CSV: label,t1_value,t2_value
-    createChartFromCSV('chartQ24', 'groupedBar', 'q24.csv'); // MODIFIED
-    loadFileContent('q24.sql', 'q24sql');
-
-    // Expected CSV: label,t1_value,t2_value
-    createChartFromCSV('chartQ25', 'groupedBar', 'q25.csv'); // MODIFIED
-    loadFileContent('q25.sql', 'q25sql');
-
-    // Expected CSV: label,t1_value,t2_value
-    createChartFromCSV('chartQ26', 'groupedBar', 'q26.csv'); // MODIFIED
-    loadFileContent('q26.sql', 'q26sql');
-
-    // Expected CSV: label,t1_value,t2_value
-    createChartFromCSV('chartQ27', 'groupedBar', 'q27.csv'); // MODIFIED
-    loadFileContent('q27.sql', 'q27sql');
-
-    // Expected CSV: label,t1_value,t2_value
-    createChartFromCSV('chartQ28', 'groupedBar', 'q28.csv'); // MODIFIED
-    loadFileContent('q28.sql', 'q28sql');
-
-    // Expected CSV: label,value
-    createChartFromCSV('chartQ29', 'bar', 'q29.csv', {}, true); // Horizontal bar // MODIFIED
-    loadFileContent('q29.sql', 'q29sql');
-
-    // Expected CSV: label,value
-    createChartFromCSV('chartQ30', 'bar', 'q30.csv', {}, true); // Horizontal bar // MODIFIED
-    loadFileContent('q30.sql', 'q30sql');
-
+    // Initialize OVERVIEW Charts
+    createChartFromCSV('chartQ01', 'groupedBar', 'chart_data/q01.csv');
+    loadFileContent('chart_data/q01.sql', 'q01sql');
+    createChartFromCSV('chartQ02', 'pie', 'chart_data/q02.csv');
+    loadFileContent('chart_data/q02.sql', 'q02sql');
+    createChartFromCSV('chartQ03', 'bar', 'chart_data/q03.csv', {}, true); 
+    loadFileContent('chart_data/q03.sql', 'q03sql');
+    createChartFromCSV('chartQ04', 'bar', 'chart_data/q04.csv', {}, true); 
+    loadFileContent('chart_data/q04.sql', 'q04sql');
+    createChartFromCSV('chartQ05', 'pie', 'chart_data/q05.csv');
+    loadFileContent('chart_data/q05.sql', 'q05sql');
+    createChartFromCSV('chartQ06', 'bar', 'chart_data/q06.csv', {}, true); 
+    loadFileContent('chart_data/q06.sql', 'q06sql');
+    createChartFromCSV('chartQ07', 'pie', 'chart_data/q07.csv');
+    loadFileContent('chart_data/q07.sql', 'q07sql');
+    createChartFromCSV('chartQ08', 'pie', 'chart_data/q08.csv');
+    loadFileContent('chart_data/q08.sql', 'q08sql');
+    createChartFromCSV('chartQ09', 'bar', 'chart_data/q09.csv'); 
+    loadFileContent('chart_data/q09.sql', 'q09sql');
+    createChartFromCSV('chartQ10', 'bar', 'chart_data/q10.csv'); 
+    loadFileContent('chart_data/q10.sql', 'q10sql');
+    createChartFromCSV('chartQ11', 'bar', 'chart_data/q11.csv', {}, true); 
+    loadFileContent('chart_data/q11.sql', 'q11sql');
+    createChartFromCSV('chartQ12', 'bar', 'chart_data/q12.csv', {}, true); 
+    loadFileContent('chart_data/q12.sql', 'q12sql');
+    createChartFromCSV('chartQ13', 'bar', 'chart_data/q13.csv', {}, true); 
+    loadFileContent('chart_data/q13.sql', 'q13sql');
+    createChartFromCSV('chartQ14', 'bar', 'chart_data/q14.csv', {}, true); 
+    loadFileContent('chart_data/q14.sql', 'q14sql');
+    createChartFromCSV('chartQ15', 'pie', 'chart_data/q15.csv');
+    loadFileContent('chart_data/q15.sql', 'q15sql');
+    createChartFromCSV('chartQ16', 'pie', 'chart_data/q16.csv');
+    loadFileContent('chart_data/q16.sql', 'q16sql');
+    createChartFromCSV('chartQ17', 'pie', 'chart_data/q17.csv');
+    loadFileContent('chart_data/q17.sql', 'q17sql');
+    createChartFromCSV('chartQ18', 'bar', 'chart_data/q18.csv', {}, true); 
+    loadFileContent('chart_data/q18.sql', 'q18sql');
+    createChartFromCSV('chartQ19', 'pie', 'chart_data/q19.csv');
+    loadFileContent('chart_data/q19.sql', 'q19sql');
+    createChartFromCSV('chartQ20', 'bar', 'chart_data/q20.csv', {}, true); 
+    loadFileContent('chart_data/q20.sql', 'q20sql');
+    createChartFromCSV('chartQ21', 'bar', 'chart_data/q21.csv', {}, true); 
+    loadFileContent('chart_data/q21.sql', 'q21sql');
+    createChartFromCSV('chartQ22', 'groupedBar', 'chart_data/q22.csv', {}, true);
+    loadFileContent('chart_data/q22.sql', 'q22sql');
+    createChartFromCSV('chartQ23', 'groupedBar', 'chart_data/q23.csv', {}, true);
+    loadFileContent('chart_data/q23.sql', 'q23sql');
+    createChartFromCSV('chartQ24', 'groupedBar', 'chart_data/q24.csv');
+    loadFileContent('chart_data/q24.sql', 'q24sql');
+    createChartFromCSV('chartQ25', 'groupedBar', 'chart_data/q25.csv');
+    loadFileContent('chart_data/q25.sql', 'q25sql');
+    createChartFromCSV('chartQ26', 'groupedBar', 'chart_data/q26.csv');
+    loadFileContent('chart_data/q26.sql', 'q26sql');
+    createChartFromCSV('chartQ27', 'groupedBar', 'chart_data/q27.csv');
+    loadFileContent('chart_data/q27.sql', 'q27sql');
+    createChartFromCSV('chartQ28', 'groupedBar', 'chart_data/q28.csv');
+    loadFileContent('chart_data/q28.sql', 'q28sql');
+    createChartFromCSV('chartQ29', 'bar', 'chart_data/q29.csv', {}, true); 
+    loadFileContent('chart_data/q29.sql', 'q29sql');
+    createChartFromCSV('chartQ30', 'bar', 'chart_data/q30.csv', {}, true); 
+    loadFileContent('chart_data/q30.sql', 'q30sql');
 });

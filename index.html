@@ -6,28 +6,418 @@
     <title>Validating RDF Data: a Community Survey Results</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .page-nav {
+            text-align: center; 
+            margin-bottom: 25px; 
+            padding-bottom: 10px; 
+            border-bottom: 1px solid #eee; 
+        }
+
+        .page-nav ul {
+            list-style: none; 
+            padding: 0;
+            margin: 0;
+        }
+
+        .page-nav li {
+            display: inline-block; 
+            margin: 0 8px; 
+            position: relative; 
+        }
+
+        .page-nav a {
+            text-decoration: none; 
+            color: #0056b3;
+            font-size: 0.9em;
+            padding: 3px 0;
+            display: inline-block;
+        }
+
+        .page-nav a:hover,
+        .page-nav a:focus {
+            text-decoration: underline;
+            color: #003d80;
+        }
+
+        /* --- Dropdown Specific Styles START --- */
+        .arrow-down {
+            font-size: 0.8em;
+            margin-left: 4px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute; 
+            background-color: #f9f9f9; 
+            min-width: 180px; 
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1; 
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 0;
+            border-radius: 4px;
+            text-align: left;
+        }
+
+        /* Style for items within the dropdown */
+        .dropdown-content li {
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Style for links within the dropdown */
+        .dropdown-content a {
+            color: black;
+            padding: 8px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.85em;
+            white-space: nowrap;
+        }
+
+        /* Hover effect for dropdown links */
+        .dropdown-content a:hover {
+            background-color: #ddd;
+            text-decoration: none;
+            color: black;
+        }
+
+        /* Show the dropdown menu on hover */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+    </style>
+
 </head>
 <body>
 
 <h1>Validating RDF Data: a Community Survey</h1>
+<nav class="page-nav">
+    <ul>
+        <li><a href="#highlighted-insights">Highlighted Insights</a></li>
+        <li class="dropdown">
+            <a href="#overview">Survey Overview <span class="arrow-down">&#9662;</span></a> <ul class="dropdown-content">
+                <li><a href="#section-background">1 Background</a></li>
+                <li><a href="#section-usage-context">2 Usage Context</a></li>
+                <li><a href="#section-validation-usage">3 Validation Usage</a></li>
+                <li><a href="#section-shacl-features">4 SHACL Features</a></li>
+                <li><a href="#section-shape-creation">5 Shape Creation</a></li>
+                <li><a href="#section-future-development">6 Future Development</a></li>
+            </ul>
+        </li>
+        <li><a href="#source-data">Source Data</a></li>
+    </ul>
+</nav>
+
 <p>This webpage gives an overview of the results from the RDF Validation Survey,
 specifically for the answers collected between December 2024 and March 2025.
 The survey itself is still available
-<a href="https://forms.gle/SY5PGNXbFTxaT4bi8" target="_blank">here</a>.</p> <p>All graphs have been generated based on the cleaned data available as
+<a href="" target="_blank">here</a>.</p> <p>All graphs have been generated based on the cleaned data available as
     <a href="">CSV files</a>, or a ready-made <a href="">DuckDB file</a>. You can find the SQL queries retrieving the data for the graphs below
     every graph. Try them out in our <a href="databaseshell.html" target="_blank">database shell</a> directly in the browser: copy the SQL queries associated with the charts and paste them in the DuckDB browser shell!
 </p>
 
-<h2>Highlighted Insights</h2>
-<p>TODO: here we will highlight the same graphs as in the paper</p>
+<h2 id="highlighted-insights">Highlighted Insights</h2>
+<p>This section highlights key figures and tables as presented in the accompanying paper.</p>
 
-<h2>Overview</h2>
+<details open class="section-details" id="paper-fig1a">
+    <summary><h3>Professional Background</h3></summary>
+    <h4>Professional Background of Respondents (2025 vs 2022)</h4>
+    <div class="chart-container">
+        <canvas id="chartFig1a"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="fig1asql">Copy SQL</button>
+        </summary>
+        <pre><code id="fig1asql"></code></pre>
+    </details>
+</details>
+
+<details open class="section-details" id="paper-fig1b">
+    <summary><h3>Application Domains</h3></summary>
+    <h4>Main Application Domains for SHACL or ShEx</h4>
+    <div class="chart-container">
+        <canvas id="chartFig1b"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="fig1bsql">Copy SQL</button>
+        </summary>
+        <pre><code id="fig1bsql"></code></pre>
+    </details>
+</details>
+
+<details open class="section-details" id="paper-fig1c">
+    <summary><h3>Years of Experience</h3></summary>
+    <h4>Years of Experience with RDF Validation/Shape Technologies by Professional Background</h4>
+    <div class="chart-container">
+        <canvas id="chartFig1c"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="fig1csql">Copy SQL</button>
+        </summary>
+        <pre><code id="fig1csql"></code></pre>
+    </details>
+</details>
+
+<details open class="section-details" id="paper-fig1d">
+    <summary><h3>Language Familiarity</h3></summary>
+    <h4>Familiarity with RDF Validation Technologies</h4>
+    <div class="chart-container">
+        <canvas id="chartFig1d"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="fig1dsql">Copy SQL</button>
+        </summary>
+        <pre><code id="fig1dsql"></code></pre>
+    </details>
+</details>
+
+<details open class="section-details" id="paper-fig2">
+    <summary><h3>Methods for Shape Creation</h3></summary>
+    <h4>Comparison of Shape Creation Methods (2025 vs 2022)</h4>
+    <div class="chart-container">
+        <canvas id="chartFig2"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="fig2sql">Copy SQL</button>
+        </summary>
+        <pre><code id="fig2sql"></code></pre>
+    </details>
+</details>
+
+<details open class="section-details" id="paper-fig3">
+    <summary><h3>Validation Usage Frequency</h3></summary>
+    <h4>Frequency of Working with RDF Shape Languages by Professional Background</h4>
+    <div class="chart-container">
+        <canvas id="chartFig3"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="fig3sql">Copy SQL</button>
+        </summary>
+        <pre><code id="fig3sql"></code></pre>
+    </details>
+</details>
+
+<details open class="section-details" id="paper-fig4a">
+    <summary><h3>SHACL-SPARQL Usage Frequency</h3></summary>
+    <h4>Frequency of Using SPARQL-based Constraint Components</h4>
+    <div class="chart-container">
+        <canvas id="chartFig4a"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="fig4asql">Copy SQL</button>
+        </summary>
+        <pre><code id="fig4asql"></code></pre>
+    </details>
+</details>
+
+<details open class="section-details" id="paper-fig4b">
+    <summary><h3>SHACL-SPARQL Motivation</h3></summary>
+    <h4>Motivation for Using SPARQL-based Constraint Components</h4>
+    <div class="chart-container">
+        <canvas id="chartFig4b"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="fig4bsql">Copy SQL</button>
+        </summary>
+        <pre><code id="fig4bsql"></code></pre>
+    </details>
+</details>
+
+<details open class="section-details" id="paper-fig5">
+    <summary><h3>Methods for Validating Evolving KGs</h3></summary>
+    <h4>Adapting Validation Processes for Evolving Knowledge Graphs</h4>
+    <div class="chart-container">
+        <canvas id="chartFig5"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="fig5sql">Copy SQL</button>
+        </summary>
+        <pre><code id="fig5sql"></code></pre>
+    </details>
+</details>
+
+<details open class="section-details" id="paper-fig6a">
+    <summary><h3>Graph Size vs. Performance Concerns</h3></summary>
+    <h4>Performance Concerns in Relation to Graph Size at Validation Time</h4>
+    <div class="chart-container">
+        <canvas id="chartFig6a"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="fig6asql">Copy SQL</button>
+        </summary>
+        <pre><code id="fig6asql"></code></pre>
+    </details>
+</details>
+
+<details open class="section-details" id="paper-fig6b">
+    <summary><h3>Frequency of Use vs. Advanced Features</h3></summary>
+    <h4>Usage of Advanced SHACL Features Based on Overall Usage Frequency</h4>
+    <div class="chart-container">
+        <canvas id="chartFig6b"></canvas>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="fig6bsql">Copy SQL</button>
+        </summary>
+        <pre><code id="fig6bsql"></code></pre>
+    </details>
+</details>
+
+<details open class="section-details" id="paper-tab1a">
+    <summary><h3>Shape Generation/Extraction Tools</h3></summary>
+    <h4>Tools Used for Shape Generation/Extraction (2025 vs 2022)</h4>
+    <div class="table-container">
+        <table id="tableTab1a"></table>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="tab1asql">Copy SQL</button>
+        </summary>
+        <pre><code id="tab1asql"></code></pre>
+    </details>
+</details>
+
+<details open class="section-details" id="paper-tab1b">
+    <summary><h3>SHACL Validators</h3></summary>
+    <h4>SHACL Validation Software/Framework Usage by Professional Background</h4>
+    <div class="table-container">
+        <table id="tableTab1b"></table>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="tab1bsql">Copy SQL</button>
+        </summary>
+        <pre><code id="tab1bsql"></code></pre>
+    </details>
+</details>
+
+<details open class="section-details" id="paper-tab2a">
+    <summary><h3>Advanced SHACL Feature Usage</h3></summary>
+    <h4>Usage of Advanced SHACL Features by Professional Background</h4>
+    <div class="table-container">
+        <table id="tableTab2a"></table>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="tab2asql">Copy SQL</button>
+        </summary>
+        <pre><code id="tab2asql"></code></pre>
+    </details>
+</details>
+
+<details open class="section-details" id="paper-tab2b">
+    <summary><h3>Graph Size at Validation Time</h3></summary>
+    <h4>Typical RDF Graph Size at Validation Time by Professional Background</h4>
+    <div class="table-container">
+        <table id="tableTab2b"></table>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="tab2bsql">Copy SQL</button>
+        </summary>
+        <pre><code id="tab2bsql"></code></pre>
+    </details>
+</details>
+
+<details open class="section-details" id="paper-tab3a">
+    <summary><h3>Perceived Advantages</h3></summary>
+    <h4>Main Perceived Advantages of SHACL/ShEx</h4>
+    <div class="table-container">
+        <table id="tableTab3a"></table>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="tab3asql">Copy SQL</button>
+        </summary>
+        <pre><code id="tab3asql"></code></pre>
+    </details>
+</details>
+
+<details open class="section-details" id="paper-tab3b">
+    <summary><h3>Reported Issues and Limitations</h3></summary>
+    <h4>Reported Issues, Limitations, and Desired Enhancements</h4>
+    <div class="table-container">
+        <table id="tableTab3b"></table>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="tab3bsql">Copy SQL</button>
+        </summary>
+        <pre><code id="tab3bsql"></code></pre>
+    </details>
+</details>
+
+<details open class="section-details" id="paper-tab4a">
+    <summary><h3>Validation Report Usefulness</h3></summary>
+    <h4>Features to Improve Usefulness of Validation Reports</h4>
+    <div class="table-container">
+        <table id="tableTab4a"></table>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="tab4asql">Copy SQL</button>
+        </summary>
+        <pre><code id="tab4asql"></code></pre>
+    </details>
+</details>
+
+<details open class="section-details" id="paper-tab4b">
+    <summary><h3>Desired Future Language Features</h3></summary>
+    <h4>Desired Future Extensions of SHACL Standard</h4>
+    <div class="table-container">
+        <table id="tableTab4b"></table>
+    </div>
+    <details>
+        <summary>
+            Show/Hide Source SQL Query
+            <button class="copy-sql-button" data-target="tab4bsql">Copy SQL</button>
+        </summary>
+        <pre><code id="tab4bsql"></code></pre>
+    </details>
+</details>
+
+
+<h2 id="overview">Overview</h2>
+This overview shows the number of respondents per answer for each of the questions from the original survey.
 <div class="global-controls">
     <button id="expand-all">Expand All Sections</button>
     <button id="collapse-all">Collapse All Sections</button>
 </div>
 
-<details open class="section-details">
+<details class="section-details" id="section-background">
     <summary><h3>1 Background and Demographics</h3></summary>
     <h4>Question 1: What is your professional background?</h4>
     <div class="chart-container">
@@ -38,7 +428,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q01sql">Copy SQL</button>
         </summary>
-        <pre><code id="q01sql">SHOW TABLES;</code></pre>
+        <pre><code id="q01sql"></code></pre>
     </details>
 
     <h4>Question 2: How many years of experience do you have with RDF validation/shape technologies?</h4>
@@ -50,7 +440,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q02sql">Copy SQL</button>
         </summary>
-        <pre><code id="q02sql">SHOW TABLES;</code></pre>
+        <pre><code id="q02sql"></code></pre>
     </details>
 
     <h4>Question 3: Do you work with different graph models or RDF standards? Please select all that apply.</h4>
@@ -62,12 +452,12 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q03sql">Copy SQL</button>
         </summary>
-        <pre><code id="q03sql">SHOW TABLES;</code></pre>
+        <pre><code id="q03sql"></code></pre>
     </details>
 </details>
 
 
-<details open class="section-details">
+<details class="section-details" id="section-usage-context">
     <summary><h3>2 Usage Context and Specifics</h3></summary>
     <h4>Question 4: What RDF validation technologies do you have experience with? Please select all that apply.</h4>
     <div class="chart-container">
@@ -78,7 +468,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q04sql">Copy SQL</button>
         </summary>
-        <pre><code id="q04sql">SHOW TABLES;</code></pre>
+        <pre><code id="q04sql"></code></pre>
     </details>
 
     <h4>Question 5: How frequently do you work with RDF shape languages?</h4>
@@ -90,7 +480,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q05sql">Copy SQL</button>
         </summary>
-        <pre><code id="q05sql">SHOW TABLES;</code></pre>
+        <pre><code id="q05sql"></code></pre>
     </details>
 
     <h4>Question 6: What are the main data domains you use SHACL or ShEx for? Please select all that apply.</h4>
@@ -102,7 +492,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q06sql">Copy SQL</button>
         </summary>
-        <pre><code id="q06sql">SHOW TABLES;</code></pre>
+        <pre><code id="q06sql"></code></pre>
     </details>
 
     <h4>Question 7: In your projects, how do SHACL and ShEx affect data quality and consistency?</h4>
@@ -114,7 +504,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q07sql">Copy SQL</button>
         </summary>
-        <pre><code id="q07sql">SHOW TABLES;</code></pre>
+        <pre><code id="q07sql"></code></pre>
     </details>
 
     <h4>Question 8: If you had to choose one language for future projects, which would it be?</h4>
@@ -126,12 +516,12 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q08sql">Copy SQL</button>
         </summary>
-        <pre><code id="q08sql">SHOW TABLES;</code></pre>
+        <pre><code id="q08sql"></code></pre>
     </details>
 </details>
 
 
-<details open class="section-details">
+<details class="section-details" id="section-validation-usage">
     <summary><h3>3 Validation Usage</h3></summary>
     <h4>Question 9: When validating, how many distinct classes and properties does your data graph usually have?</h4>
     <div class="chart-container">
@@ -142,7 +532,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q09sql">Copy SQL</button>
         </summary>
-        <pre><code id="q09sql">SHOW TABLES;</code></pre>
+        <pre><code id="q09sql"></code></pre>
     </details>
 
     <h4>Question 10: When validating, how large is your RDF graph usually?</h4>
@@ -154,7 +544,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q10sql">Copy SQL</button>
         </summary>
-        <pre><code id="q10sql">SHOW TABLES;</code></pre>
+        <pre><code id="q10sql"></code></pre>
     </details>
 
     <h4>Question 11: If you are a user of SHACL, which validation software/framework do you use?</h4>
@@ -166,7 +556,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q11sql">Copy SQL</button>
         </summary>
-        <pre><code id="q11sql">SHOW TABLES;</code></pre>
+        <pre><code id="q11sql"></code></pre>
     </details>
 
     <h4>Question 12: If you are a user of ShEx, which validation software/framework do you use?</h4>
@@ -178,7 +568,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q12sql">Copy SQL</button>
         </summary>
-        <pre><code id="q12sql">SHOW TABLES;</code></pre>
+        <pre><code id="q12sql"></code></pre>
     </details>
 
     <h4>Question 13: What do you consider the main advantages of SHACL/ShEx in your work or projects? Please select all that apply.</h4>
@@ -190,7 +580,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q13sql">Copy SQL</button>
         </summary>
-        <pre><code id="q13sql">SHOW TABLES;</code></pre>
+        <pre><code id="q13sql"></code></pre>
     </details>
 
     <h4>Question 14: Have you encountered any limitations or challenges when using SHACL/ShEx?</h4>
@@ -202,7 +592,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q14sql">Copy SQL</button>
         </summary>
-        <pre><code id="q14sql">SHOW TABLES;</code></pre>
+        <pre><code id="q14sql"></code></pre>
     </details>
 
     <h4>Question 15: Have you worked with evolving or dynamic RDF knowledge graphs? If yes, how do you adapt your validation processes?</h4>
@@ -214,12 +604,12 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q15sql">Copy SQL</button>
         </summary>
-        <pre><code id="q15sql">SHOW TABLES;</code></pre>
+        <pre><code id="q15sql"></code></pre>
     </details>
 </details>
 
 
-<details open class="section-details">
+<details class="section-details" id="section-shacl-features">
     <summary><h3>4 Specific Features of SHACL</h3></summary>
     <h4>Question 16: How often do you use SHACL-core constraint components (for example sh:mincount etc)?</h4>
     <div class="chart-container">
@@ -230,7 +620,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q16sql">Copy SQL</button>
         </summary>
-        <pre><code id="q16sql">SHOW TABLES;</code></pre>
+        <pre><code id="q16sql"></code></pre>
     </details>
 
     <h4>Question 17: Do you use SPARQL-based constraint components?</h4>
@@ -242,7 +632,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q17sql">Copy SQL</button>
         </summary>
-        <pre><code id="q17sql">SHOW TABLES;</code></pre>
+        <pre><code id="q17sql"></code></pre>
     </details>
 
     <h4>Question 18: If you use SPARQL-based constraint components, please specify the reason:</h4>
@@ -254,7 +644,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q18sql">Copy SQL</button>
         </summary>
-        <pre><code id="q18sql">SHOW TABLES;</code></pre>
+        <pre><code id="q18sql"></code></pre>
     </details>
 
     <h4>Question 19: Is the information provided by the validation report sufficient for your use cases?</h4>
@@ -266,7 +656,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q19sql">Copy SQL</button>
         </summary>
-        <pre><code id="q19sql">SHOW TABLES;</code></pre>
+        <pre><code id="q19sql"></code></pre>
     </details>
 
     <h4>Question 20: Which of the SHACL advanced features do you use?</h4>
@@ -278,7 +668,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q20sql">Copy SQL</button>
         </summary>
-        <pre><code id="q20sql">SHOW TABLES;</code></pre>
+        <pre><code id="q20sql"></code></pre>
     </details>
 
     <h4>Question 21: Which extensions of the SHACL standard do you wish for?</h4>
@@ -290,12 +680,12 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q21sql">Copy SQL</button>
         </summary>
-        <pre><code id="q21sql">SHOW TABLES;</code></pre>
+        <pre><code id="q21sql"></code></pre>
     </details>
 </details>
 
 
-<details open class="section-details">
+<details class="section-details" id="section-shape-creation">
     <summary><h3>5 Shape Creation and Extraction</h3></summary>
     <h4>Question 22: How do you generate validating shapes SHACL/ShEx?</h4>
     <div class="chart-container">
@@ -306,7 +696,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q22sql">Copy SQL</button>
         </summary>
-        <pre><code id="q22sql">SHOW TABLES;</code></pre>
+        <pre><code id="q22sql"></code></pre>
     </details>
 
     <h4>Question 23: Which tools or method do you use to extract/create validating shapes (SHACL/ShEx)?</h4>
@@ -318,7 +708,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q23sql">Copy SQL</button>
         </summary>
-        <pre><code id="q23sql">SHOW TABLES;</code></pre>
+        <pre><code id="q23sql"></code></pre>
     </details>
 
     <h4>Question 24: How many shapes do you usually generate?</h4>
@@ -330,7 +720,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q24sql">Copy SQL</button>
         </summary>
-        <pre><code id="q24sql">SHOW TABLES;</code></pre>
+        <pre><code id="q24sql"></code></pre>
     </details>
 
     <h4>Question 25: How large is your ontology usually in the context of shape extraction?</h4>
@@ -342,7 +732,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q25sql">Copy SQL</button>
         </summary>
-        <pre><code id="q25sql">SHOW TABLES;</code></pre>
+        <pre><code id="q25sql"></code></pre>
     </details>
 
     <h4>Question 26: How many distinct predicate types are present in your RDF graph usually?</h4>
@@ -354,7 +744,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q26sql">Copy SQL</button>
         </summary>
-        <pre><code id="q26sql">SHOW TABLES;</code></pre>
+        <pre><code id="q26sql"></code></pre>
     </details>
 
     <h4>Question 27: How large is your RDF graph usually in the context of shape extraction?</h4>
@@ -366,7 +756,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q27sql">Copy SQL</button>
         </summary>
-        <pre><code id="q27sql">SHOW TABLES;</code></pre>
+        <pre><code id="q27sql"></code></pre>
     </details>
 
     <h4>Question 28: Do you generate shapes for the entire graph or only for some portions?</h4>
@@ -378,12 +768,12 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q28sql">Copy SQL</button>
         </summary>
-        <pre><code id="q28sql">SHOW TABLES;</code></pre>
+        <pre><code id="q28sql"></code></pre>
     </details>
 </details>
 
 
-<details open class="section-details">
+<details class="section-details" id="section-future-development">
     <summary><h3>6 Future Development</h3></summary>
     <h4>Question 29: What are the shortcomings you experienced when working with SHACL/ShEx? Please select all that apply.</h4>
     <div class="chart-container">
@@ -394,7 +784,7 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q29sql">Copy SQL</button>
         </summary>
-        <pre><code id="q29sql">SHOW TABLES;</code></pre>
+        <pre><code id="q29sql"></code></pre>
     </details>
 
     <h4>Question 30: What features would improve the usefulness of validation reports? Please select all that apply.</h4>
@@ -406,10 +796,12 @@ The survey itself is still available
             Show/Hide Source SQL Query
             <button class="copy-sql-button" data-target="q30sql">Copy SQL</button>
         </summary>
-        <pre><code id="q30sql">SHOW TABLES;</code></pre>
+        <pre><code id="q30sql"></code></pre>
     </details>
 </details>
 
+<h2 id="source-data">Source data</h2>
+<p>The raw and cleaned data used for generating these charts can be found here: [Link to data - TODO]</p>
 <script src="general.js" defer></script>
 <script src="surveyoverview_charts.js" defer></script>
 </body>
