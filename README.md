@@ -9,4 +9,4 @@ python -m http.server
 ```
 
 ## Data
-The data is available as an Excel file and as a DuckDB database file. 
+The data is available as an Excel file and as a DuckDB database file in the `reference_data` folder.
